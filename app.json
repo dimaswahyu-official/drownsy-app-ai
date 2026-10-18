@@ -1,25 +1,13 @@
 {
   "expo": {
-    "name": "drowsy-guard",
+    "name": "DrowsyGuard",
     "slug": "drowsy-guard",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "android": { "package": "com.yourname.drowsyguard", "permissions": ["CAMERA", "VIBRATE"] },
+    "ios": { "bundleIdentifier": "com.yourname.drowsyguard" },
+    "plugins": [
+      ["react-native-vision-camera", { "cameraPermissionText": "DrowsyGuard uses the front camera to detect drowsiness." }]
+    ]
   }
 }
