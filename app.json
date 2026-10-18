@@ -1,13 +1,35 @@
 {
   "expo": {
-    "name": "DrowsyGuard",
+    "name": "drowsy-guard",
     "slug": "drowsy-guard",
     "version": "1.0.0",
     "orientation": "portrait",
-    "android": { "package": "com.yourname.drowsyguard", "permissions": ["CAMERA", "VIBRATE"] },
-    "ios": { "bundleIdentifier": "com.yourname.drowsyguard" },
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dimaswahyu.drowsyguard"
+    },
+    "android": {
+      "package": "com.dimaswahyu.drowsyguard",
+      "permissions": ["CAMERA", "VIBRATE"],
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
     "plugins": [
-      ["react-native-vision-camera", { "cameraPermissionText": "DrowsyGuard uses the front camera to detect drowsiness." }]
+      [
+        "react-native-vision-camera",
+        { "cameraPermissionText": "DrowsyGuard uses the front camera to detect drowsiness." }
+      ],
+      ["react-native-fast-tflite", { "enableAndroidGpuLibraries": false }]
     ]
   }
 }

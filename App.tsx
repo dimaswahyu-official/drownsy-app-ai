@@ -5,7 +5,7 @@ import { Face, useFaceDetector, FaceDetectorOptions } from 'react-native-vision-
 import { Worklets } from 'react-native-worklets-core';
 import * as Speech from 'expo-speech';
 import { useKeepAwake } from 'expo-keep-awake';
-import { DrowsinessDetector, Status } from './Drowsiness';
+import { DrowsinessDetector, Status } from './drowsiness';
 
 const options: FaceDetectorOptions = {
   performanceMode: 'fast',
