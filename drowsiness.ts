@@ -2,7 +2,7 @@
 export type Status = 'NO_FACE' | 'OK' | 'WARNING' | 'DROWSY';
 
 export const CONFIG = {
-  EYE_CLOSED_BELOW: 0.4,   // open-probability under this = eyes closed
+  EYE_CLOSED_BELOW: 0.21,  // eye aspect ratio (EAR) under this = eyes closed
   CLOSED_MS_ALARM: 1500,   // eyes closed this long => alarm
   PERCLOS_WINDOW_MS: 30000,
   PERCLOS_ALARM: 0.3,      // >30% of window with eyes closed => alarm
@@ -14,7 +14,7 @@ export class DrowsinessDetector {
   private samples: { t: number; closed: boolean }[] = [];
   private lastFaceAt = Date.now();
 
-  /** eyeOpen: 0..1 average of both eyes, or null if no face this frame */
+  /** eyeOpen: average EAR of both eyes, or null if no face this frame */
   update(eyeOpen: number | null, now = Date.now()): { status: Status; perclos: number } {
     if (eyeOpen === null) {
       this.closedSince = null;
@@ -44,4 +44,25 @@ export class DrowsinessDetector {
     if (this.samples.length < 10) return 0;
     return this.samples.filter(s => s.closed).length / this.samples.length;
   }
+}
+
+// ---- Eye Aspect Ratio from MediaPipe's 478-point face mesh ----
+// landmarks: flat Float32Array [x0,y0,z0, x1,y1,z1, ...]
+const RIGHT_EYE = [33, 160, 158, 133, 153, 144];  // p1..p6
+const LEFT_EYE  = [362, 385, 387, 263, 373, 380];
+
+function ear(lm: ArrayLike<number>, idx: number[]): number {
+  'worklet';
+  const d = (a: number, b: number) => {
+    const dx = lm[a * 3] - lm[b * 3];
+    const dy = lm[a * 3 + 1] - lm[b * 3 + 1];
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+  const [p1, p2, p3, p4, p5, p6] = idx;
+  return (d(p2, p6) + d(p3, p5)) / (2 * d(p1, p4));
+}
+
+export function computeEAR(lm: ArrayLike<number>): number {
+  'worklet';
+  return (ear(lm, RIGHT_EYE) + ear(lm, LEFT_EYE)) / 2;
 }
